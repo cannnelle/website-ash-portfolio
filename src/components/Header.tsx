@@ -14,11 +14,16 @@ interface NavLink {
   href: string;
 }
 
+// Interface for Site Settings
+interface SiteSettingsData {
+  siteTitle?: string;
+}
+
 // Fetch navigation data (all published pages)
 async function getNavData(): Promise<PageNavItemData[]> {
   // Fetch all documents of type 'page' that have a slug
   const query = `*[_type == "page" && defined(slug.current)] {
-    _type, 
+    _type,
     title,
     slug
   }`;
@@ -27,8 +32,21 @@ async function getNavData(): Promise<PageNavItemData[]> {
   return data;
 }
 
+// Fetch site settings
+async function getSiteSettings(): Promise<SiteSettingsData> {
+  const query = `*[_type == "siteSettings"][0] { siteTitle }`;
+  const settings = await client.fetch<SiteSettingsData>(query);
+  return settings || {}; // Return empty object if no settings found
+}
+
 export default async function Header() {
-  const navData = await getNavData();
+  // Fetch both sets of data concurrently
+  const [navData, siteSettings] = await Promise.all([
+    getNavData(),
+    getSiteSettings()
+  ]);
+
+  const siteTitle = siteSettings.siteTitle || 'Ash Lopez'; // Use fetched title or fallback
 
   // Build navigation links array from fetched pages
   const navLinks: NavLink[] = [
@@ -39,11 +57,11 @@ export default async function Header() {
         const href = item.slug?.current ? `/${item.slug.current}` : null;
         return href ? { title: item.title || item.slug?.current || 'Untitled Page', href } : null;
       })
-      .filter((item): item is NavLink => item !== null) 
+      .filter((item): item is NavLink => item !== null)
       .sort((a, b) => {
         // Define desired order (e.g., Work, About, Contact)
         // This relies on slugs being consistent ('/about', '/contact')
-        const order = ['/', '/about', '/contact']; 
+        const order = ['/', '/about', '/contact'];
         return order.indexOf(a.href) - order.indexOf(b.href);
       }),
   ];
@@ -54,7 +72,7 @@ export default async function Header() {
         {/* Make H1 clickable link to home */}
         <h1 className="text-lg font-semibold">
           <Link href="/" className="hover:text-gray-300 transition-colors">
-            Ash Lopez
+            {siteTitle} {/* Use the fetched site title */}
           </Link>
         </h1>
         {/* Pass generated links to the Navigation client component */}
