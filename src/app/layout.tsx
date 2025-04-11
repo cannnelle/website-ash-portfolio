@@ -78,6 +78,12 @@ export default async function RootLayout({
   return (
     // Apply CSS variables to the html element
     <html lang="en" style={rootStyle}>
+      <head>
+        {/* Preconnect to Sanity CDN and API for faster asset/data loading */}
+        <link rel="preconnect" href="https://cdn.sanity.io" />
+        <link rel="preconnect" href="https://e6ti0bq7.api.sanity.io" />
+        {/* Other head elements like meta tags, title (managed by Next.js metadata) */}
+      </head>
       {/* Remove inline style from body */}
       <body className="antialiased">
         <Header /> 
