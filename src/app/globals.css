@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  /* Use CSS variables set in layout.tsx */
+  background-color: var(--color-background);
+  color: var(--color-text);
+  /* Keep font and tracking */
+  @apply font-sans tracking-[1px]; 
+}
+
+/* Apply link color globally */
+a {
+  color: var(--color-link);
+  /* Add transition for hover effect consistency */
+  @apply transition-colors duration-200;
+}
+
+/* Optional: Style link hover state */
+/* 
+a:hover {
+  color: ...; /* You could define a --color-link-hover variable if needed */
+/* }
+*/
+
+/* Add any other global base styles here if needed */
