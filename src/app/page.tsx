@@ -1,7 +1,4 @@
-import Image from "next/image";
-import Link from "next/link";
 import { client } from "@/sanity/client";
-import { urlForImage } from "@/sanity/image";
 import type { Image as SanityImage, PortableTextBlock, Slug } from 'sanity';
 import { PortableText } from '@portabletext/react';
 import FeaturedProjectsGrid from '@/components/FeaturedProjectsGrid';

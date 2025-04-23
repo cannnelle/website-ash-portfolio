@@ -3,11 +3,10 @@
 import { client } from '@/sanity/client';
 import { urlForImage } from '@/sanity/image';
 // Revert to standard types
-import type { Image as SanityImage, PortableTextBlock, Slug } from 'sanity'; 
+import type { Image as SanityImage, Slug } from 'sanity'; 
 import Image from 'next/image';
 import Link from 'next/link';
-import { notFound } from 'next/navigation'; // Import notFound
-import { useState, useEffect } from 'react'; // <-- Import hooks
+import { useState, useEffect, use } from 'react'; // <-- Import hooks
 import Lightbox from "yet-another-react-lightbox"; // <-- Import Lightbox
 import "yet-another-react-lightbox/styles.css"; // <-- Import Lightbox styles
 
@@ -45,11 +44,12 @@ async function getProject(slug: string): Promise<ProjectDetails | null> {
 
 // Props type for the page component
 interface ProjectPageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 // The Page Component (Async)
-export default function ProjectPage({ params }: ProjectPageProps) {
+export default function ProjectPage(props: ProjectPageProps) {
+  const params = use(props.params);
   const [project, setProject] = useState<ProjectDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -95,7 +95,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
   .map(img => ({ 
       src: urlForImage(img)?.url() || '', // Ensure URL exists
       // Optional: Add more props like title, description if needed
-  })); 
+  }));
 
   // Function to open lightbox at a specific image index
   const openLightbox = (index: number) => {

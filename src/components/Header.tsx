@@ -71,7 +71,7 @@ export default async function Header() {
       <div className="max-w-[1200px] mx-auto px-4 flex justify-between items-center">
         {/* Make H1 clickable link to home */}
         <h1 className="text-lg font-semibold">
-          <Link href="/" className="hover:text-gray-300 transition-colors">
+          <Link href="/" className="hover:opacity-60 transition-colors">
             {siteTitle} {/* Use the fetched site title */}
           </Link>
         </h1>

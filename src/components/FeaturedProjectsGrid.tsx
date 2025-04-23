@@ -27,7 +27,7 @@ export default function FeaturedProjectsGrid({ initialProjects }: FeaturedProjec
 
   const handleSort = (order: typeof sortOrder) => {
     setSortOrder(order);
-    let newSortedProjects = [...allProjects]; // Sort from the original full list
+    const newSortedProjects = [...allProjects]; // Sort from the original full list
 
     switch (order) {
       case 'newest':

@@ -3,7 +3,6 @@ import { urlForImage } from '@/sanity/image';
 import type { Image as SanityImage, PortableTextBlock, Slug } from 'sanity';
 import { PortableText } from '@portabletext/react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 // Revalidate this page every 60 seconds
@@ -56,11 +55,12 @@ const PortableTextLink = ({ value, children }: { value?: { href?: string }; chil
 
 // Props for the page component
 interface PageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 // Generic Page Component
-export default async function Page({ params }: PageProps) {
+export default async function Page(props: PageProps) {
+  const params = await props.params;
   const page = await getPageData(params.slug);
 
   if (!page) {
@@ -75,10 +75,9 @@ export default async function Page({ params }: PageProps) {
     <article className="space-y-8">
       {/* Title */}
       <h1 className="text-3xl md:text-4xl font-bold">{page.title}</h1>
-
       {/* Optional Featured Image */}
       {featuredImageUrl && (
-        <div className="mb-8 max-w-[600px] mx-auto"> {/* Consistent with project page */}
+        <div className="mb-8 max-w-[600px]"> {/* Consistent with project page */}
           <Image
             src={featuredImageUrl}
             alt={page.title || 'Featured image'}
@@ -91,7 +90,6 @@ export default async function Page({ params }: PageProps) {
           />
         </div>
       )}
-
       {/* Body Content */}
       {page.body && (
         <div className="prose prose-invert max-w-none">
@@ -101,7 +99,6 @@ export default async function Page({ params }: PageProps) {
           />
         </div>
       )}
-
       {/* Optional Additional Images Grid */}
       {page.additionalImages && page.additionalImages.length > 0 && (
         <div className="mb-8">
@@ -132,7 +129,6 @@ export default async function Page({ params }: PageProps) {
           </div>
         </div>
       )}
-
       {/* --- Conditionally Render Contact Details --- */}
       {hasContactDetails && (
         <div className="pt-8 border-t border-gray-700">

@@ -1,9 +1,9 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
 import { client } from "@/sanity/client";
 import { urlForImage } from "@/sanity/image";
-import type { Image as SanityImage, PortableTextBlock, Asset } from 'sanity';
+import type { Image as SanityImage } from 'sanity';
 
 // Define SiteSettings structure
 interface SiteSettingsData {

@@ -32,11 +32,12 @@ async function getProjectsByTag(tag: string): Promise<Project[]> {
 
 // Props type for the page component
 interface TagPageProps {
-  params: { tag: string };
+  params: Promise<{ tag: string }>;
 }
 
 // The Page Component (Async)
-export default async function TagPage({ params }: TagPageProps) {
+export default async function TagPage(props: TagPageProps) {
+  const params = await props.params;
   // Decode the tag from the URL parameter (it might be URL-encoded)
   const decodedTag = decodeURIComponent(params.tag);
   const projects = await getProjectsByTag(decodedTag);
@@ -85,7 +86,7 @@ export default async function TagPage({ params }: TagPageProps) {
           })}
         </div>
       ) : (
-        <p>No projects found for the tag "{decodedTag}".</p>
+        <p>{`No projects found for ${decodedTag}`}</p>
       )}
     </div>
   );
